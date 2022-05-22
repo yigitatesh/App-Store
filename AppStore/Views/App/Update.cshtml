@@ -1,0 +1,38 @@
+﻿@model App
+
+<form method="post" asp-action="Update">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Update App</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Category"></label>
+            <!-- <input asp-for="Category" class="form-control" /> -->
+            <select asp-for="Category" class="custom-select form-control">
+              <option selected value="">Select a category</option>
+              <option value="Game">Game</option>
+              <option value="Programming">Programming</option>
+              <option value="Photography">Photography</option>
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="">Update</button>
+        <a asp-controller="App" asp-action="Index" class="btn btn-secondary">
+            Back to List
+        </a>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

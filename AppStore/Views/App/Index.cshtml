@@ -1,0 +1,122 @@
+﻿@model IEnumerable<App>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">App List</h2>
+        </div>
+        <!-- Search field -->
+        <div class="col-3">
+            <input id="search" type="text" class="form-control" placeholder="Search" />
+        </div>
+        @*<form class="col-3">
+            <input class="form-control" type="text" placeholder="Search">
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </form>*@
+        <!-- Button to create an app -->
+        <div class="col-3 text-end">
+            <a asp-controller="App" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> &nbsp &nbsp Create New App
+            </a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Category
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in ViewBag.apps)
+        {
+            <tr>
+                <td width="50%">
+                    @obj.Name
+                </td>
+                <td width="30%">
+                    @obj.Category
+                </td>
+                <td>
+                    <!-- Button to update an app-->
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="App" asp-action="Update" asp-route-id="@obj.Id"
+                        class="btn btn-primary mx-2"> 
+                            <i class="bi bi-pencil-square"></i> 
+                            Edit 
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <!-- Button to delete an app-->
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="App" asp-action="Delete" asp-route-id="@obj.Id"
+                        class="btn btn-danger mx-2"> 
+                            <i class="bi bi-trash"></i>
+                            Delete 
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- jQuery script for dynamic filtering using search text input -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var $rows = $("tbody tr");
+
+        $("#search").keyup(function() {
+            // get search text, trim and convert it to lowercase
+            var searchText = $.trim($(this).val()).replace(/ +g/, " ").toLowerCase();
+
+            $rows.show().filter(function() {
+                // get text of element which is app name
+                // app name is in first child of tr
+                var element = $(this).find("td:nth-child(1)");
+                var text = element.text().replace(/\s+/g, " ").toLowerCase();
+
+                // get index of searched text and return false if it exists
+                var index = text.indexOf(searchText);
+                if (index >= 0) {
+                    // text contains searched text
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }).hide();
+
+            // unstripe table
+            $("table").removeClass("table-striped");
+            
+            // reapply striped table
+            var i = 0;
+            $("tbody tr:visible").each(function(index) {
+                if (i % 2 === 0) {
+                    //$(this).addClass("stripe");
+                    $(this).css("background-color", "rgba(0,0,0,.05)");
+                }
+                else {
+                    //$(this).removeClass("stripe");
+                    $(this).css("background-color", "rgba(0,0,0,.00)");
+                }
+
+                i += 1;
+            });
+        });
+    });
+</script>
